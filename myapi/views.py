@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from . import serializers
+from . import models
 
 
 @api_view(['POST'])
@@ -38,6 +39,7 @@ def login(request):
     return Response({'token': token.key},
                     status=status.HTTP_200_OK)
 
+
 @api_view(['POST'])
 def user_password_change(request):
     if request.method == 'POST':
@@ -49,3 +51,32 @@ def user_password_change(request):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response("Error", status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def create_book(request):
+    if request.method == 'POST':
+        serializer = serializers.BookSerializer(data=request.data)
+        print(serializer)
+
+        if serializer.is_valid():
+            print("save")
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response("Error", status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def get_book_list(request):
+    if request.method == 'GET':
+        try:
+            book_query = models.Book.objects.all()
+        except models.Book.DoesNotExist:
+            return Response("Error", status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = serializers.BookSerializer(book_query, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    return Response("Error", status=status.HTTP_400_BAD_REQUEST)
+
