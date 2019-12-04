@@ -23,7 +23,7 @@ class Book(models.Model):
     book_content = models.TextField(blank=True)
     released_date = models.DateTimeField(blank=True, null=True)
     tag = models.ManyToManyField(BookTag)
-    posted_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    posted_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="poster")
     posted_date = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):

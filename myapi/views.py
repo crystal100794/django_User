@@ -85,8 +85,8 @@ def delete_book(request, book_id):
             book_query = models.Book.objects.get(pk=book_id)
         except models.Book.DoesNotExist:
             return Response("Error", status=status.HTTP_400_BAD_REQUEST)
-
-        book_query.delete(user=request.user)
+        if request.user == book_query.posted_by:
+            book_query.delete(user=request.user)
         return Response(status=status.HTTP_200_OK)
 
     return Response("Error", status=status.HTTP_400_BAD_REQUEST)
