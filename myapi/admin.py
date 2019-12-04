@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Book, BookTag, Person
+from .models import Book, Person, BookTag
 
 
 # admin.site.register(Author)
