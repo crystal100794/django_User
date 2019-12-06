@@ -9,5 +9,7 @@ urlpatterns = [
     path('book/list/', views.get_book_list),
     path('book/update/<int:book_id>', views.update_book),
     path('book/delete/<int:book_id>', views.delete_book),
-    path('rest-auth/', include('rest_auth.urls'))
+    path('rest-auth/', include('rest_auth.urls')),
+    path('user/book/', views.get_user_book),
+    path('user/profile/<int:user_id>', views.get_user_profile)
 ]

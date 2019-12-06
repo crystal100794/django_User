@@ -112,3 +112,32 @@ def update_book(request, book_id):
     return Response("Error", status=status.HTTP_400_BAD_REQUEST)
 
 
+@permission_classes([permissions.IsAuthenticated])
+@api_view(['GET'])
+def get_user_book(request, user_id):
+    if request.method == 'GET':
+        try:
+            book_query = models.Book.objects.get(pk=user_id)
+        except models.Book.DoesNotExist:
+            return Response("Error1", status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = serializers.BookSerializer(book_query, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    return Response("Error2", status=status.HTTP_400_BAD_REQUEST)
+
+
+@permission_classes([permissions.IsAuthenticated])
+@api_view(['GET'])
+def get_user_profile(request, user_id):
+    if request.method == 'GET':
+        try:
+            profile_query = models.User.objects.get(id=user_id)
+        except models.User.DoesNotExist:
+            return Response("Error", status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = serializers.UserSerializer(profile_query)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    return Response("Error", status=status.HTTP_400_BAD_REQUEST)
+

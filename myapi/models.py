@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from django_User import settings
+
 
 class Person(models.Model):
     name = models.CharField(max_length=128)
