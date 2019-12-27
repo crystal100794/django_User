@@ -2,6 +2,8 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from rest_framework import serializers
 import django_filters
+from rest_framework.authentication import SessionAuthentication
+
 from . import models
 
 
@@ -11,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('user_id', 'username', 'password', 'email')
-        extra_kwargs = {'password' : {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True}}
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -22,8 +24,20 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Book
-        fields = ('id', 'author', 'book_name', 'description', 'released_date', 'tag', 'posted_by', 'posted_date')
+        fields = ('id', 'author', 'book_name', 'description',
+                  'released_date', 'tag', 'posted_by', 'posted_date', 'price')
         read_only_fields = ('book_name',)
 
 
+class EverybodyCanAuthentication(SessionAuthentication):
+    def authenticate(self, request):
+        return None
 
+
+class BasketSeriaizer(serializers.ModelSerializer):
+    book_name = serializers.CharField(max_length=500, blank=True)
+    quality = serializers.IntegerField()
+
+    class Meta:
+        models = models.Basket_item
+        fields = '__all__'

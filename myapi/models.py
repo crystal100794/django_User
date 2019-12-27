@@ -27,7 +27,20 @@ class Book(models.Model):
     tag = models.ManyToManyField(BookTag)
     posted_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="poster")
     posted_date = models.DateTimeField(auto_now_add=True, blank=True)
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+    quality = models.IntegerField()
 
     def __str__(self):
         return self.book_name
 
+
+class Basket(models.Model):
+    user_id = models.OneToOneField(User)
+
+
+class Basket_item(models.Model):
+    book_name = models.ForeignKey(Book)
+    quality = models.IntegerField()
+
+    def __str__(self):
+        return self.book_name

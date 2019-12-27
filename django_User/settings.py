@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites', # allauth
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -42,6 +43,14 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'django_filters',
+    'g2s',
+
+    #allauth
+    'rest_auth.registration',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
 
 ]
 
@@ -139,3 +148,20 @@ REST_FRAMEWORK = {
 }
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
+
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+
+    #allauth
+    'allauth.account.auth_backends.AuthenticationBackend'
+)
+
+
+SITE_ID=1
+
+
+G2S_MERCHANT_ID = "123456"
+G2S_SECRET_KEY = "YourSecretWord"
+G2S_MERCHANT_SITE_ID = "1234567"
+G2S_CURRENCY = 'USD'
