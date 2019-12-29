@@ -168,10 +168,10 @@ def get_user_profile(request, user_id):
 
 @permission_classes([permissions.IsAuthenticated])
 @api_view(['GET', 'POST', 'UPDATE', 'DELETE'])
-def basket_item(request, book_id):
+def basket_item(request, user_id):
     if request.method == 'GET':
         try:
-            item_query = models.Basket_item.objects.get(pk=book_id)
+            item_query = models.Basket_item.objects.get(id=user_id)
         except models.Basket_item.DoesNotExist:
             return Response("Error", status=status.HTTP_400_BAD_REQUEST)
 
@@ -180,7 +180,7 @@ def basket_item(request, book_id):
 
     if request.method == 'POST':
         try:
-            item_query = models.Basket_item.objects.get(pk=book_id)
+            item_query = models.Basket_item.objects.get(id=user_id)
         except models.Basket_item.DoesNotExist:
             return Response("Error", status=status.HTTP_400_BAD_REQUEST)
 
@@ -195,7 +195,7 @@ def basket_item(request, book_id):
 
     if request.method == 'UPDATE':
         try:
-            item_query = models.Basket_item.objects.get(pk=book_id)
+            item_query = models.Basket_item.objects.get(id=user_id)
         except models.Basket_item.DoesNotExist:
             return Response("Error", status=status.HTTP_400_BAD_REQUEST)
 
@@ -210,7 +210,7 @@ def basket_item(request, book_id):
 
     if request.method == "DELETE":
         try:
-            item_query = models.Basket_item.objects.get(pk=book_id)
+            item_query = models.Basket_item.objects.get(id=user_id)
         except models.Basket_item.DoesNotExist:
             return Response("Error", status=status.HTTP_400_BAD_REQUEST)
 

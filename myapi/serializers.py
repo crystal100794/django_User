@@ -35,9 +35,14 @@ class EverybodyCanAuthentication(SessionAuthentication):
 
 
 class BasketSeriaizer(serializers.ModelSerializer):
-    book_name = serializers.CharField(max_length=500, blank=True)
+    book_name = serializers.CharField(max_length=100)
     quality = serializers.IntegerField()
+    price = serializers.DecimalField(max_digits=8, decimal_places=2)
 
     class Meta:
         models = models.Basket_item
-        fields = '__all__'
+        fields = ('book_name', 'quality', 'price', 'total_price', 'quality')
+
+    def total_price(self):
+        total_price = self.quality * self.price
+        return total_price

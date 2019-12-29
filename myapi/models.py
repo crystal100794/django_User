@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 from django_User import settings
@@ -34,13 +35,16 @@ class Book(models.Model):
         return self.book_name
 
 
-class Basket(models.Model):
-    user_id = models.OneToOneField(User)
+# class Basket(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 
 class Basket_item(models.Model):
-    book_name = models.ForeignKey(Book)
+    owner = models.OneToOneField(User, on_delete=models.CASCADE)
     quality = models.IntegerField()
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+    total_price = models.DecimalField(max_digits=8, decimal_places=2)
+    book_name = models.ForeignKey(Book, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.book_name
