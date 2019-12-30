@@ -34,15 +34,13 @@ class EverybodyCanAuthentication(SessionAuthentication):
         return None
 
 
-class BasketSeriaizer(serializers.ModelSerializer):
-    book_name = serializers.CharField(max_length=100)
-    quality = serializers.IntegerField()
-    price = serializers.DecimalField(max_digits=8, decimal_places=2)
-
+class CartSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        models = models.Basket_item
-        fields = ('book_name', 'quality', 'price', 'total_price', 'quality')
+        model = models.Cart
+        fields = ('items',)
 
-    def total_price(self):
-        total_price = self.quality * self.price
-        return total_price
+
+class OrderSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Order
+        fields = ('items', 'cart')

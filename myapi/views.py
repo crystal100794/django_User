@@ -167,61 +167,30 @@ def get_user_profile(request, user_id):
 
 
 @permission_classes([permissions.IsAuthenticated])
-@api_view(['GET', 'POST', 'UPDATE', 'DELETE'])
-def basket_item(request, user_id):
-    if request.method == 'GET':
-        try:
-            item_query = models.Basket_item.objects.get(id=user_id)
-        except models.Basket_item.DoesNotExist:
-            return Response("Error", status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = serializers.BasketSeriaizer(item_query)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
+@api_view(['GET','POST'])
+def get_basket_item(request, cart_id):
     if request.method == 'POST':
         try:
-            item_query = models.Basket_item.objects.get(id=user_id)
-        except models.Basket_item.DoesNotExist:
+            book_query = models.Cart.objects.get(pk=cart_id)
+            # serializer = serializers.BookSerializer(book_query, data=request.data)
+        except models.Book.DoesNotExist:
             return Response("Error", status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = serializers.BookSerializer(item_query, data=request.data, partial=True)
+        serializer = serializers.BookSerializer(book_query, data=request.data, partial=True)
 
         if serializer.is_valid():
-            if request.user == item_query.posted_by:
+            if request.user == book_query.posted_by:
                 serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
 
-        return Response("Error", status=status.HTTP_400_BAD_REQUEST)
 
-    if request.method == 'UPDATE':
+    if request.method == 'GET':
         try:
-            item_query = models.Basket_item.objects.get(id=user_id)
-        except models.Basket_item.DoesNotExist:
+            profile_query = models.User.objects.get(id=cart_id)
+        except models.User.DoesNotExist:
             return Response("Error", status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = serializers.BookSerializer(item_query, data=request.data, partial=True)
-
-        if serializer.is_valid():
-            if request.user == item_query.posted_by:
-                serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        return Response("Error", status=status.HTTP_400_BAD_REQUEST)
-
-    if request.method == "DELETE":
-        try:
-            item_query = models.Basket_item.objects.get(id=user_id)
-        except models.Basket_item.DoesNotExist:
-            return Response("Error", status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = serializers.BookSerializer(item_query, data=request.data, partial=True)
-
-        if serializer.is_valid():
-            if request.user == item_query.posted_by:
-                serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        return Response("Error", status=status.HTTP_400_BAD_REQUEST)
+        serializer = serializers.UserSerializer(profile_query)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     return Response("Error", status=status.HTTP_400_BAD_REQUEST)
-

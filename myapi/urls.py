@@ -16,5 +16,6 @@ urlpatterns = [
     path('auth2/', include('allauth.urls')),
     path('auth/', include('rest_auth.urls')),
     path('rest-auth/facebook/', views.FacebookLogin, name='fb_login'),
-    path('basket/<int:user_id>', views.basket_item),
+    path('basket/<int:cart_id>', views.get_basket_item)
+
 ]

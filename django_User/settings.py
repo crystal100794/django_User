@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'django_filters',
-    'g2s',
 
     #allauth
     'rest_auth.registration',
