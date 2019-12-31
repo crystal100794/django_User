@@ -2,7 +2,6 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from rest_framework import serializers
 import django_filters
-from rest_framework.authentication import SessionAuthentication
 
 from . import models
 
@@ -29,18 +28,15 @@ class BookSerializer(serializers.ModelSerializer):
         read_only_fields = ('book_name',)
 
 
-class EverybodyCanAuthentication(SessionAuthentication):
-    def authenticate(self, request):
-        return None
+class CartItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CartItem
+        fields = '__all__'
 
 
-class CartSerializer(serializers.HyperlinkedModelSerializer):
+class CartSerializer(serializers.ModelSerializer):
+    items = CartItemSerializer(many=True, read_only=True)
+
     class Meta:
         model = models.Cart
-        fields = ('items',)
-
-
-class OrderSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = models.Order
-        fields = ('items', 'cart')
+        fields = ('user', 'items')

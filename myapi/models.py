@@ -35,13 +35,11 @@ class Book(models.Model):
 
 
 class Cart(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, related_name="carts", on_delete=models.CASCADE)
-    items = models.ManyToManyField(Book)
+    user = models.OneToOneField(User, related_name="user_cart", on_delete=models.CASCADE)
 
 
-class Order(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
+class CartItem(models.Model):
     cart = models.ForeignKey(Cart, blank=True, null=True, on_delete=models.CASCADE)
-    items = models.ManyToManyField(Book)
-    user = models.ForeignKey(User, related_name="orders", on_delete=models.CASCADE)
+    items = models.OneToOneField(Book, blank=True, null=True, on_delete=models.CASCADE)
+    items_quality = models.IntegerField(default=1, blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
