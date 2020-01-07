@@ -1,8 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from django_User import settings
-
 
 class Person(models.Model):
     name = models.CharField(max_length=128)
@@ -28,18 +26,20 @@ class Book(models.Model):
     posted_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="poster")
     posted_date = models.DateTimeField(auto_now_add=True, blank=True)
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    quality = models.IntegerField()
 
     def __str__(self):
         return self.book_name
 
 
-class Cart(models.Model):
+class Basket(models.Model):
     user = models.OneToOneField(User, related_name="user_cart", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.id)
 
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, blank=True, null=True, on_delete=models.CASCADE)
-    items = models.OneToOneField(Book, blank=True, null=True, on_delete=models.CASCADE)
-    items_quality = models.IntegerField(default=1, blank=True, null=True)
+    cart = models.ForeignKey(Basket, blank=True, null=True, on_delete=models.CASCADE)
+    items = models.ForeignKey(Book, blank=True, null=True, on_delete=models.CASCADE)
+    items_quality = models.IntegerField(default=1)
     date_created = models.DateTimeField(auto_now_add=True)

@@ -1,8 +1,5 @@
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from rest_framework import serializers
-import django_filters
-
 from . import models
 
 
@@ -24,19 +21,26 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Book
         fields = ('id', 'author', 'book_name', 'description',
-                  'released_date', 'tag', 'posted_by', 'posted_date', 'price')
+                  'released_date', 'tag', 'posted_by',
+                  'posted_date', 'price')
         read_only_fields = ('book_name',)
 
 
-class CartItemSerializer(serializers.ModelSerializer):
-    class Meta:
+class CartItemSerializer(BookSerializer):
+    price = serializers.RelatedField(read_only=True)
+    # total_price = serializers.SerializerMethodField()
+    items_quality = serializers.IntegerField()
+
+
+    class Meta(BookSerializer.Meta):
         model = models.CartItem
-        fields = '__all__'
+        fields = ('items', 'items_quality',
+                  'date_created', 'price')
 
 
-class CartSerializer(serializers.ModelSerializer):
+class BasketSerializer(serializers.ModelSerializer):
     items = CartItemSerializer(many=True, read_only=True)
 
     class Meta:
-        model = models.Cart
-        fields = ('user', 'items')
+        model = models.Basket
+        fields = ('id', 'user', 'price')
