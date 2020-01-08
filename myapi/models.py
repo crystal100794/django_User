@@ -33,13 +33,13 @@ class Book(models.Model):
 
 class Basket(models.Model):
     user = models.OneToOneField(User, related_name="user_cart", on_delete=models.CASCADE)
+    date_created = models.DateTimeField(auto_now_add=True)
+    items = models.ManyToManyField(Book)
 
-    def __str__(self):
-        return str(self.id)
 
-
-class CartItem(models.Model):
+class Order(models.Model):
     cart = models.ForeignKey(Basket, blank=True, null=True, on_delete=models.CASCADE)
     items = models.ForeignKey(Book, blank=True, null=True, on_delete=models.CASCADE)
     items_quality = models.IntegerField(default=1)
     date_created = models.DateTimeField(auto_now_add=True)
+    user = models.OneToOneField(User, related_name="user_item", on_delete=models.CASCADE)
