@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-
 from . import models
 
 
@@ -28,18 +27,15 @@ class BookSerializer(serializers.ModelSerializer):
         read_only_fields = ('book_name',)
 
 
-class BasketSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = models.Basket
-        fields = ('items', 'user', 'date_created')
-        read_only_fields = ('item',)
-
-
-
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Order
-        fields = ('items', 'items_quality', 'date_created')
-        read_only_fields = ('items', 'items_quality')
+        fields = '__all__'
 
+
+class BasketSerializer(serializers.ModelSerializer):
+    cart = OrderSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = models.Basket
+        fields = ('user', 'cart')
