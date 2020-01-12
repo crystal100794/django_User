@@ -28,14 +28,25 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    items = BookSerializer(read_only=True)
+    items_quantity = serializers.IntegerField()
+    items_price = serializers.SerializerMethodField(read_only=True)
+
+    def get_items_price(self, obj):
+        return obj.items.price * obj.items_quantity
+
     class Meta:
         model = models.Order
-        fields = '__all__'
+        fields = ('items', 'items_quantity', 'items_price')
 
 
 class BasketSerializer(serializers.ModelSerializer):
-    cart = OrderSerializer(read_only=True, many=True)
+    orders = OrderSerializer(read_only=True, many=True)
+    total_price = serializers.SerializerMethodField(read_only=True)
+
+    def get_total_price(self,obj):
+        return obj.orders.items_price
 
     class Meta:
         model = models.Basket
-        fields = ('user', 'cart')
+        fields = ('user', 'orders', 'total_price')
