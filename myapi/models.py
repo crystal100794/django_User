@@ -37,7 +37,7 @@ class Basket(models.Model):
 
 class Order(models.Model):
     basket = models.ForeignKey(Basket, related_name="orders", blank=True, null=True, on_delete=models.CASCADE)
-    items = models.ForeignKey(Book, blank=True, related_name="order_item", on_delete=models.CASCADE)
+    item = models.ForeignKey(Book, blank=True, related_name="order_item", on_delete=models.CASCADE)
     items_quantity = models.IntegerField(default=1)
     date_created = models.DateTimeField(auto_now_add=True)
 

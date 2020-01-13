@@ -17,6 +17,5 @@ urlpatterns = [
     path('auth/', include('rest_auth.urls')),
     path('rest-auth/facebook/', views.FacebookLogin, name='fb_login'),
     path('basket/', views.get_basket),
-    path('item/', views.get_item),
 
 ]

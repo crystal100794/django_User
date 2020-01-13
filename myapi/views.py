@@ -193,28 +193,28 @@ def get_basket(request):
     return Response("Error", status=status.HTTP_400_BAD_REQUEST)
 
 
-@permission_classes([permissions.IsAuthenticated])
-@api_view(['GET', 'POST'])
-def get_item(request):
-    if request.method == 'GET':
-        try:
-            cart_query = models.Order.objects.get(user=request.user)
-        except models.Order.DoesNotExist:
-            return Response("Error", status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = serializers.OrderSerializer(cart_query)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    if request.method == 'POST':
-        try:
-            item_query = models.Order.objects.get(user=request.user)
-        except models.Book.DoesNotExist:
-            return Response("Error", status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = serializers.OrderSerializer(item_query, data=request.data, partial=True)
-
-        if serializer.is_valid():
-            serializer.save(user=request.user)
-        return Response(status=status.HTTP_200_OK)
-
-    return Response("Error", status=status.HTTP_400_BAD_REQUEST)
+# @permission_classes([permissions.IsAuthenticated])
+# @api_view(['GET', 'POST'])
+# def get_item(request):
+#     if request.method == 'GET':
+#         try:
+#             cart_query = models.Order.objects.get(user=request.user)
+#         except models.Order.DoesNotExist:
+#             return Response("Error", status=status.HTTP_400_BAD_REQUEST)
+#
+#         serializer = serializers.OrderSerializer(cart_query)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+#
+#     if request.method == 'POST':
+#         try:
+#             item_query = models.Order.objects.get(user=request.user)
+#         except models.Book.DoesNotExist:
+#             return Response("Error", status=status.HTTP_400_BAD_REQUEST)
+#
+#         serializer = serializers.OrderSerializer(item_query, data=request.data, partial=True)
+#
+#         if serializer.is_valid():
+#             serializer.save(user=request.user)
+#         return Response(status=status.HTTP_200_OK)
+#
+#     return Response("Error", status=status.HTTP_400_BAD_REQUEST)

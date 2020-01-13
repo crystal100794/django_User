@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.db.models import Sum
 from rest_framework import serializers
 
 from . import models
@@ -28,25 +29,26 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    items = BookSerializer(read_only=True)
+    item = BookSerializer(read_only=True, many=True)
     items_quantity = serializers.IntegerField()
     items_price = serializers.SerializerMethodField(read_only=True)
 
     def get_items_price(self, obj):
-        return obj.items.price * obj.items_quantity
+        return obj.item.price * obj.items_quantity
 
     class Meta:
         model = models.Order
-        fields = ('items', 'items_quantity', 'items_price')
+        fields = ('item', 'items_quantity', 'items_price', 'date_created')
 
 
 class BasketSerializer(serializers.ModelSerializer):
     orders = OrderSerializer(read_only=True, many=True)
-    total_price = serializers.SerializerMethodField(read_only=True)
+    items_quantity = serializers.SerializerMethodField(read_only=True)
 
-    def get_total_price(self,obj):
-        return obj.orders.items_price
+    def get_items_quantity(self,obj):
+        return obj.orders.items_quantity
+
 
     class Meta:
         model = models.Basket
-        fields = ('user', 'orders', 'total_price')
+        fields = ('user', 'orders','items_quantity')
